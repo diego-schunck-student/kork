@@ -19,6 +19,7 @@ A máquina host (ou control node) requer:
 ## Passo a Passo de Execução
 O ambiente foi projetado com foco em idempotência. A automação garante a instalação do motor do Docker, o build da aplicação e a validação do serviço em uma única execução.
 
+
 1. Clone o repositório abaixo e acesse o diretório raiz.
 	https://github.com/diego-schunck-student/kork.git
 
