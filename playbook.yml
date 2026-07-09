@@ -1,0 +1,65 @@
+---
+- name: Provisionamento do Ambiente Projeto Korp
+  hosts: localhost
+  connection: local
+  become: yes
+  tasks:
+    - name: Atualizar cache do apt
+      apt:
+        update_cache: yes
+
+    - name: Instalar dependencias do Docker
+      apt:
+        name:
+          - ca-certificates
+          - curl
+          - gnupg
+        state: present
+
+    - name: Adicionar chave GPG oficial do Docker
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Adicionar repositorio do Docker
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+
+    - name: Instalar Docker e Docker Compose Plugin
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose-plugin
+        state: present
+
+    - name: Garantir que o servico Docker esta rodando
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Fazer build e subir os containers (Docker Compose)
+      command: docker compose up -d --build
+      args:
+        chdir: "{{ playbook_dir }}"
+
+    - name: Aguardar os servicos iniciarem
+      pause:
+        seconds: 5
+
+    - name: Testar o funcionamento do servico HTTP
+      uri:
+        url: http://localhost:80/projeto-korp
+        method: GET
+        return_content: yes
+      register: http_response
+      retries: 5
+      delay: 3
+      until: http_response.status == 200
+
+    - name: Exibir a resposta do teste no console
+      debug:
+        msg: "Resposta do servidor: {{ http_response.json }}"

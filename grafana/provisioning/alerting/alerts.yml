@@ -1,0 +1,73 @@
+# Grafana Alerting Provisioning v1
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: 'Korp - Alertas de Disponibilidade'
+    folder: 'Projeto Korp'
+    interval: 10s
+    rules:
+      - uid: 'korp_api_down_alert'
+        title: ' CRITICAL: API Projeto Korp - Fora do Ar'
+        condition: 'C'
+        data:
+          - refId: 'A'
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: 'prometheusuid'
+            model:
+              expr: 'up{job="projeto-korp"}'
+              intervalMs: 10000
+              maxDataPoints: 43200
+              refId: 'A'
+              type: 'query'
+          - refId: 'B'
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: '__expr__'
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 0
+                    type: 'gt'
+                  operator:
+                    type: 'and'
+                  query:
+                    params:
+                      - A
+                  reducer:
+                    params: []
+                    type: 'last'
+                  type: 'query'
+              datasource:
+                name: 'Expression'
+                type: '__expr__'
+              expression: 'A'
+              intervalMs: 10000
+              maxDataPoints: 43200
+              refId: 'B'
+              type: 'classic_conditions'
+          - refId: 'C'
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: '__expr__'
+            model:
+              expression: 'A == 0'
+              intervalMs: 10000
+              maxDataPoints: 43200
+              refId: 'C'
+              type: 'math'
+        noDataState: 'Alerting'
+        execErrState: 'Error'
+        for: '1m'
+        annotations:
+          summary: 'A API do Projeto Korp caiu!'
+          description: 'O container da aplicação (http-server-projeto-korp) está fora do ar há mais de 1 minuto na porta interna 8080. Ação imediata é necessária.'
+        labels:
+          severity: 'critical'
+          environment: 'production'
+          team: 'devops'

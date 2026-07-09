@@ -1,0 +1,18 @@
+{
+  "title": "Projeto Korp - Dashboard",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Disponibilidade do Serviço",
+      "targets": [{"expr": "service_up"}],
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+    },
+    {
+      "type": "timeseries",
+      "title": "Volume de Requisições",
+      "targets": [{"expr": "rate(http_requests_total[1m])"}],
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+    }
+  ],
+  "schemaVersion": 36
+}

@@ -1,0 +1,17 @@
+projeto-korp/
+├── app/
+│   ├── main.go
+│   └── Dockerfile
+├── nginx/
+│   └── default.conf
+├── prometheus/
+│   └── prometheus.yml
+├── grafana/
+│   └── provisioning/
+│       ├── datasources/
+│       │   └── datasource.yml
+│       └── dashboards/
+│           ├── dashboard.yml
+│           └── dashboard.json
+├── docker-compose.yml
+└── playbook.yml

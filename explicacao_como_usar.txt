@@ -1,0 +1,135 @@
+Com certeza! Vou detalhar passo a passo como você deve montar, executar e testar esse projeto na sua máquina antes de enviar para a empresa.
+
+Como você está se candidatando a uma vaga Sênior, estruturar o repositório de forma limpa e saber explicar como a automação funciona será o seu grande diferencial na entrevista.
+
+Aqui está o guia de execução:
+
+Passo 1: Preparar o Ambiente e o Repositório
+Antes de criar os arquivos, vamos organizar a casa. Abra o seu terminal (no seu ambiente Linux, como o Ubuntu ou Debian) e execute:
+
+Crie a pasta raiz do projeto:
+
+Bash
+
+
+mkdir projeto-korp
+cd projeto-korp
+Inicie o repositório Git: (Isso é importante pois o desafio pede que esteja no GitHub).
+
+Bash
+
+
+git init
+Crie a estrutura de pastas:
+
+Bash
+
+
+mkdir -p app nginx prometheus grafana/provisioning/datasources grafana/provisioning/dashboards
+Passo 2: Criar os Arquivos
+Agora, você vai criar os arquivos exatamente com os nomes e caminhos que eu te passei na resposta anterior. Você pode usar o nano, vim ou abrir a pasta no VS Code.
+
+Dentro de app/, crie o main.go e o Dockerfile e cole os códigos neles.
+
+Dentro de nginx/, crie o default.conf e cole a configuração do proxy.
+
+Dentro de prometheus/, crie o prometheus.yml.
+
+Dentro das pastas do grafana/, crie os três arquivos (datasource.yml, dashboard.yml e dashboard.json). Nota: Isso é o bônus que vai impressionar os avaliadores, pois o Grafana já vai subir pronto, sem você precisar clicar em nada na interface.
+
+Na raiz do projeto (projeto-korp/), crie o docker-compose.yml e o playbook.yml.
+
+Passo 3: Executar a Automação (A Mágica do Ansible)
+O desafio pede que o ambiente seja totalmente provisionado com um único comando Ansible. O arquivo playbook.yml que criamos já faz tudo: instala o Docker (caso não tenha), faz o build do Golang, sobe a rede, os containers e até faz o teste (curl).
+
+Instale o Ansible na sua máquina local (se ainda não tiver):
+
+Bash
+
+
+sudo apt update
+sudo apt install ansible -y
+Rode o Playbook:
+Estando na raiz do seu projeto (projeto-korp/), execute o comando abaixo. Ele vai pedir a sua senha de usuário do Linux (necessária para instalar o Docker via apt).
+
+Bash
+
+
+ansible-playbook playbook.yml --ask-become-pass
+Acompanhe o log: O Ansible vai mostrar linha por linha o que está fazendo. No final, se tudo der certo, ele vai imprimir a resposta do servidor Golang em verde na sua tela.
+
+Passo 4: Validar o Funcionamento (Preparação para a Entrevista)
+O avaliador vai querer que você demonstre isso funcionando. Faça os testes manuais para garantir:
+
+Teste a API (Passando pelo NGINX):
+
+Bash
+
+
+curl http://localhost:80/projeto-korp
+O que deve acontecer: Você deve ver o JSON com "nome": "Projeto Korp" e o horário atual.
+
+Teste o Grafana:
+
+Abra o seu navegador e acesse: http://localhost:3000
+
+O usuário padrão é admin e a senha é admin.
+
+Vá na aba de Dashboards. Você verá que o "Projeto Korp - Dashboard" já está lá, criado automaticamente, mostrando a disponibilidade (UP) e um gráfico de volume de requisições.
+
+Passo 5: Enviar o Projeto
+Com tudo funcionando perfeitamente na sua máquina:
+
+Faça o commit de tudo:
+
+Bash
+
+
+git add .
+git commit -m "feat: implementacao completa do desafio (Golang, Docker, NGINX, Prometheus, Grafana e Ansible)"
+Suba para o GitHub:
+
+Crie um repositório público no seu GitHub.
+
+Adicione o remote e faça o push:
+
+Bash
+
+
+git remote add origin <URL_DO_SEU_REPOSITORIO>
+git branch -M main
+git push -u origin main
+Envie o E-mail:
+Escreva um e-mail profissional para rh@korp.com.br, coloque o link do seu repositório do GitHub e mencione que você incluiu o provisionamento automático do dashboard do Grafana como bônus.
+
+Se algum passo der erro na sua máquina durante a execução, é só mandar o erro aqui que eu te ajudo a fazer o troubleshooting!
+
+
+
+#####################################
+##### explicacao para o que become 
+#####################################
+    ansible-playbook playbook.yml --ask-become-pass
+
+
+
+
+
+Essa é a sua senha de usuário do Linux (a mesma senha que você usa para executar comandos com sudo).
+
+O Ansible utiliza o conceito de become (que significa "tornar-se") para realizar a elevação de privilégios. Como no nosso arquivo playbook.yml nós configuramos a diretiva become: yes, o Ansible está avisando que precisará de permissões de administrador (root) para executar as tarefas da automação.
+
+Ele precisa dessa senha de sudo para conseguir realizar as seguintes ações na sua máquina:
+
+Atualizar o cache do sistema (apt update).
+
+Instalar pacotes essenciais e o próprio Docker.
+
+Adicionar chaves GPG e repositórios no sistema.
+
+Gerenciar serviços de sistema (iniciar e habilitar o Docker via systemd).
+
+O que fazer:
+Basta digitar a senha do seu usuário e pressionar Enter. Por padrão de segurança do Linux, os caracteres não aparecerão na tela enquanto você digita, mas o sistema está registrando.
+
+##
