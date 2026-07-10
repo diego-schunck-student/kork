@@ -62,22 +62,24 @@ URLS Privadas - (Segurança Zero trust)
 	http://localhost:8080/projeto-korp
 
 
-4 - Estruturação do projeto
 
+### 4 - Estruturação do projeto
+
+```text
 projeto-korp/
-├── app/
+├── app/                     # Código fonte da aplicação em Go
 │   ├── main.go
-│   └── Dockerfile
-├── nginx/
+│   └── Dockerfile           # Multi-stage build para a API
+├── nginx/                   # Configurações do proxy reverso
 │   └── default.conf
-├── prometheus/
+├── prometheus/              # Coleta de métricas e health checks
 │   └── prometheus.yml
-├── grafana/
+├── grafana/                 # Dashboards de observabilidade
 │   └── provisioning/
 │       ├── datasources/
 │       │   └── datasource.yml
 │       └── dashboards/
 │           ├── dashboard.yml
 │           └── dashboard.json
-├── docker-compose.yml
-└── playbook.yml
+├── docker-compose.yml       # Orquestração local dos contêineres
+└── playbook.yml             # Automação Ansible da infraestrutura
