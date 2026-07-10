@@ -55,8 +55,29 @@ URLs Públicas (Acessíveis pelo seu Navegador)
 
 URLS Privadas - (Segurança Zero trust)
 
-3.3 Métricas Brutas e Targets (Prometheus):  - So livre para Rede docker
-http://localhost:9090
+	3.3 Métricas Brutas e Targets (Prometheus):  - So livre para Rede docker
+	http://localhost:9090
 
-3.4. Aplicação Web (Acesso Direto / Interno): URls privada - seguranca Zero trust
-http://localhost:8080/projeto-korp
+	3.4. Aplicação Web (Acesso Direto / Interno): URls privada - seguranca Zero trust
+	http://localhost:8080/projeto-korp
+
+
+4 - Estruturação do projeto
+
+projeto-korp/
+├── app/
+│   ├── main.go
+│   └── Dockerfile
+├── nginx/
+│   └── default.conf
+├── prometheus/
+│   └── prometheus.yml
+├── grafana/
+│   └── provisioning/
+│       ├── datasources/
+│       │   └── datasource.yml
+│       └── dashboards/
+│           ├── dashboard.yml
+│           └── dashboard.json
+├── docker-compose.yml
+└── playbook.yml
