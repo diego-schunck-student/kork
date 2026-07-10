@@ -33,9 +33,9 @@ O ambiente foi projetado com foco em idempotência. A automação garante a inst
 1 - Aplicação Web (Tráfego via Nginx): http://localhost:80/projeto-korp
 
 2 - Painel do Grafana: http://localhost:3000
-	2.1 - No primeiro acesso: 
-	      Usuario: admin
-	      Senha  : admin
+       No primeiro acesso: 
+       Usuario: admin
+       Senha  : admin
 
 
 
