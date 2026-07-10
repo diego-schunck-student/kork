@@ -26,3 +26,37 @@ O ambiente foi projetado com foco em idempotência. A automação garante a inst
 2. Execute o playbook de provisionamento:
    ```bash
    ansible-playbook playbook.yml
+
+
+
+### Acessos aos Serviços
+1 - Aplicação Web (Tráfego via Nginx): http://localhost:80/projeto-korp
+
+2 - Painel do Grafana: http://localhost:3000
+	2.1 - No primeiro acesso: 
+	      Usuario: admin
+	      Senha  : admin
+
+
+
+### 3 Requisitoes de segurança aplicado baseado no escopo . Isolamento de Rede e Segurança (Zero Trust)
+A porta de operação nativa da aplicação HTTP (8080) foi intencionalmente isolada e **não** está mapeada para a máquina host.
+* **A Estratégia:** A porta 8080 existe apenas dentro da rede interna do Docker (`korp-network`). A única forma de um usuário externo acessar a aplicação é passando obrigatoriamente pela porta 80 do Nginx.
+* **Justificativa de Segurança:** Se a porta 8080 fosse exposta globalmente, um atacante poderia acessar o container diretamente, contornando todas as regras de segurança, limitação de taxa (rate limit) ou cabeçalhos de proteção configurados no Proxy Reverso. Ao trancar a aplicação na rede interna, garantimos que o Nginx seja o ponto único de entrada (Single Point of Contact) para o tráfego público, enquanto o Prometheus acessa os dados de forma segura pelos "bastidores" da rede isolada. 
+
+
+URLs Públicas (Acessíveis pelo seu Navegador)
+
+	3.1 Aplicação Web (Acesso via Proxy Nginx):
+	http://localhost:80/projeto-korp
+
+	3.2 Painel de Observabilidade (Grafana):
+	http://localhost:3000
+
+URLS Privadas - (Segurança Zero trust)
+
+3.3 Métricas Brutas e Targets (Prometheus):  - So livre para Rede docker
+http://localhost:9090
+
+3.4. Aplicação Web (Acesso Direto / Interno): URls privada - seguranca Zero trust
+http://localhost:8080/projeto-korp
