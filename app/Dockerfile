@@ -1,4 +1,4 @@
-FROM golang:1.23-alpine AS builder
+FROM golang:1.23-alpine@sha256:383395b794dffa5b53012a212365d40c8e37109a626ca30d6151c8348d380b5f AS builder
 WORKDIR /app
 COPY main.go .
 # Inicializa o módulo e baixa as dependências do Prometheus no build
@@ -10,7 +10,7 @@ RUN go mod init http-server-projeto-korp && \
 
 
 #FROM alpine:latest
-FROM alpine:sha256:f41a99d2d9c1e8abb8024d0ccd08ec3dfdd9b0e1526c276f7249cd455e7fcae5
+FROM alpine@sha256:f41a99d2d9c1e8abb8024d0ccd08ec3dfdd9b0e1526c276f7249cd455e7fcae5
 WORKDIR /app
 COPY --from=builder /app/server .
 EXPOSE 8080
